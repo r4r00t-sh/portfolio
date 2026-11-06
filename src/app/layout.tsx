@@ -5,6 +5,7 @@ import {
   Manrope,
   Space_Grotesk,
 } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { GrainOverlay } from "@/components/layout/GrainOverlay";
 import { Navigation } from "@/components/layout/Navigation";
 import "./globals.css";
@@ -56,6 +57,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <GrainOverlay />
         <Navigation />
         {children}
+        <Analytics />
       </body>
     </html>
   );

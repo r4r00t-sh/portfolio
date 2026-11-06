@@ -1,0 +1,449 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #ffffff;
+  --bg-secondary: #f5f5f5;
+  --card: #efefef;
+  --text: #080808;
+  --text-secondary: #656565;
+  --text-muted: #a0a0a0;
+  --border: #d0d0d0;
+  --highlight: #080808;
+  --grain-opacity: 0.035;
+  --nav-rail: 0px;
+  --stack-runway: 145vh;
+  --section-pad-x: clamp(1rem, 4vw, 3.5rem);
+  --section-pad-y: clamp(4rem, 10vw, 8rem);
+  --radius-sharp: 2px;
+  --pattern-ink: #080808;
+}
+
+@media (min-width: 900px) {
+  :root {
+    --nav-rail: 5.5rem;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-card: var(--card);
+  --color-ink: var(--text);
+  --color-ink-secondary: var(--text-secondary);
+  --color-ink-muted: var(--text-muted);
+  --color-line: var(--border);
+  --color-highlight: var(--highlight);
+  --font-display: var(--font-space-grotesk);
+  --font-body: var(--font-manrope);
+  --font-mono: var(--font-ibm-plex-mono);
+  --font-serif: var(--font-instrument-serif);
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  /* Keep auto — smooth on every programmatic wheel tick feels extremely laggy. */
+  scroll-behavior: auto;
+  background: var(--bg);
+  height: 100%;
+  overflow-x: clip;
+  overflow-y: scroll;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: clamp(0.95rem, 1.2vw, 1.15rem);
+  line-height: 1.6;
+  /* Do NOT set overflow-x:hidden on body — it forces overflow-y:auto and
+     makes body the scrollport, which breaks mouse-wheel while the scrollbar
+     still appears to work. */
+  overflow: visible;
+  min-height: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: #080808;
+  color: #ffffff;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline: 1px solid var(--highlight);
+  outline-offset: 3px;
+}
+
+.font-display {
+  font-family: var(--font-display), sans-serif;
+}
+
+.font-body {
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+.font-mono {
+  font-family: var(--font-mono), ui-monospace, monospace;
+}
+
+.font-serif {
+  font-family: var(--font-serif), Georgia, serif;
+}
+
+.text-display {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(4rem, 11vw, 12rem);
+  line-height: 0.86;
+  letter-spacing: -0.04em;
+  font-weight: 700;
+}
+
+.text-section {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(2.5rem, 6vw, 7rem);
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+  font-weight: 600;
+}
+
+.text-label {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: clamp(0.65rem, 0.8vw, 0.75rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.section-shell {
+  padding-inline: var(--section-pad-x);
+  padding-block: var(--section-pad-y);
+  padding-left: calc(var(--section-pad-x) + var(--nav-rail));
+}
+
+
+.with-nav-offset {
+  padding-left: calc(var(--section-pad-x) + var(--nav-rail));
+  padding-right: var(--section-pad-x);
+}
+
+.hairline {
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  padding: 0.85rem 1.25rem;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.btn-ghost:hover {
+  background: var(--highlight);
+  color: var(--bg);
+  border-color: var(--highlight);
+}
+
+.btn-solid {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  border: 1px solid var(--highlight);
+  background: var(--highlight);
+  color: var(--bg);
+  padding: 0.85rem 1.25rem;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.btn-solid:hover {
+  background: transparent;
+  color: var(--highlight);
+}
+
+.grain-overlay {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.mono-portrait {
+  filter: grayscale(1) contrast(1.12) brightness(1.02);
+}
+
+.tech-chip {
+  border: 1px solid var(--border);
+  padding: 0.35rem 0.55rem;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.horizontal-panel {
+  flex: 0 0 auto;
+  width: min(82vw, 560px);
+  height: min(62vh, 560px);
+  max-height: calc(100svh - 12rem);
+  border: 1px solid var(--border);
+  background: var(--card);
+  position: relative;
+  overflow: hidden;
+}
+
+.horizontal-panel-body {
+  height: 100%;
+  overflow: hidden;
+}
+
+.section-stack-panel .section-shell {
+  padding-block: clamp(5rem, 9vh, 6rem) clamp(1.25rem, 3vh, 2.5rem);
+}
+
+@media (max-width: 768px) {
+  .horizontal-panel {
+    flex: 0 0 85vw;
+    height: auto;
+    max-height: none;
+    min-height: 420px;
+  }
+
+  .horizontal-panel-body {
+    height: auto;
+    overflow: visible;
+  }
+}
+
+/*
+  Classic sticky section stack — each panel is 100vh in document flow.
+  Next panel slides up over the previous. No overflow / wheel capture
+  on the sticky layer (that blocked mouse-wheel while scrollbar still worked).
+*/
+.section-stack-root {
+  background: var(--bg);
+}
+
+.section-stack-panel {
+  position: sticky;
+  top: 0;
+  z-index: var(--stack-z, 1);
+  height: 100svh;
+  min-height: 100svh;
+  overflow: visible;
+  background: transparent;
+}
+
+/* Horizontal strips live in a tall React-owned host; the panel sticks inside it.
+   Avoid GSAP pin-spacers — they reparent React nodes and crash removeChild. */
+.section-stack-pin-host {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-height: 100svh;
+}
+
+.section-stack-pin-host > .section-stack-panel {
+  position: sticky;
+  top: 0;
+}
+
+.section-stack-surface {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background: var(--stack-bg, var(--bg));
+  border-top: 1px solid var(--border);
+  box-shadow: 0 -24px 80px rgba(8, 8, 8, 0.08);
+}
+
+.section-stack-surface-inner {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  /* Let trackpad inertia live; only contain horizontal overscroll. */
+  overscroll-behavior-x: contain;
+  overscroll-behavior-y: auto;
+  transform-origin: 50% 50%;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Hero: no inner scroll — page scroll advances the stack immediately */
+.section-stack-surface[data-scroll-mode="page"] .section-stack-surface-inner {
+  overflow: hidden;
+}
+
+/* Horizontal: page scroll drives the strip — hide native inner Y scroll */
+.section-stack-surface[data-scroll-mode="horizontal"] .section-stack-surface-inner {
+  overflow: hidden;
+}
+
+.section-stack-surface[data-scroll-mode="horizontal"] [data-h-scroll] {
+  /* Vertical wheel is owned by the page/pin; allow touch swipe on small screens */
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+  max-width: 100%;
+}
+
+@media (min-width: 900px) {
+  .section-stack-surface[data-scroll-mode="horizontal"] [data-h-scroll] {
+    /* Scrub drives scrollLeft — hide the bar so it feels intentional, not dual-input */
+    scrollbar-width: none;
+    cursor: grab;
+  }
+  .section-stack-surface[data-scroll-mode="horizontal"] [data-h-scroll]::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.section-stack-panel:first-child .section-stack-surface {
+  border-top: 0;
+  box-shadow: none;
+}
+
+/* Tall / terminal panels leave the sticky stack so full content (and footer) can show. */
+.section-stack-panel.section-stack-end {
+  position: relative;
+  height: auto;
+  min-height: 100svh;
+  z-index: var(--stack-z, 1);
+}
+
+.section-stack-panel.section-stack-end .section-stack-surface {
+  height: auto;
+  min-height: 100svh;
+  overflow: visible;
+  box-shadow: none;
+}
+
+.section-stack-panel.section-stack-end .section-stack-surface-inner {
+  height: auto;
+  min-height: 100svh;
+  overflow: visible;
+}
+
+.nav-link {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  color: var(--text);
+  transition: opacity 0.2s ease;
+  opacity: 1;
+}
+
+.nav-link:hover {
+  opacity: 0.55;
+}
+
+.skill-hit {
+  background: rgba(8, 8, 8, 0.1);
+  color: var(--highlight);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-stack-panel {
+    position: relative;
+    height: auto;
+    overflow: visible;
+  }
+
+  .section-stack-surface,
+  .section-stack-surface-inner {
+    overflow: visible;
+    height: auto;
+    min-height: 100svh;
+    box-shadow: none;
+  }
+}
+
+@media (max-width: 899px) {
+  .section-stack-panel {
+    position: relative;
+    height: auto;
+  }
+
+  .section-stack-pin-host {
+    height: auto !important;
+    min-height: 0;
+  }
+
+  .section-stack-pin-host > .section-stack-panel {
+    position: relative;
+  }
+
+  .section-stack-surface,
+  .section-stack-surface-inner,
+  .section-stack-surface[data-scroll-mode="page"] .section-stack-surface-inner {
+    overflow: visible;
+    height: auto;
+    min-height: 100svh;
+    box-shadow: none;
+  }
+
+  /* Keep a real scrollport for horizontal strips — overflow:visible on the
+     inner surface expands the row and kills swipe on phones. */
+  .section-stack-surface[data-scroll-mode="horizontal"] {
+    overflow: hidden;
+    height: auto;
+    min-height: 100svh;
+    box-shadow: none;
+  }
+
+  .section-stack-surface[data-scroll-mode="horizontal"] .section-stack-surface-inner {
+    overflow: hidden;
+    height: auto;
+    min-height: 0;
+    box-shadow: none;
+  }
+
+  .section-stack-surface[data-scroll-mode="horizontal"] [data-h-scroll] {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    /* Allow vertical page scroll and horizontal strip swipe */
+    touch-action: pan-x pan-y;
+    scrollbar-width: thin;
+    overscroll-behavior-x: contain;
+  }
+}
